@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
 
     passwordHash: { type: String, required: true },
 
-    followers: [{ type: ObjectId, ref: "user" }],
+    server: [{ type: Object, ref: "server" }],
   },
   { timestamps: true }
 );

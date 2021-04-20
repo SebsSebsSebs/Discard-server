@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/userModel");
+const Server = require("../models/serverModel");
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
@@ -130,11 +132,9 @@ router.get("/logout", (req, res) => {
 // logged in user own profile posts
 router.get("/myprofile", auth, async (req, res) => {
   try {
-    const myPosts = await Post.find({ postedBy: req.user }).populate(
-      "postedBy",
-      "_id username followers"
-    );
-    res.json({ myPosts });
+    const myProfile = await User.find({ _id: req.user });
+    console.log("what is my profile", myProfile);
+    res.json({ myProfile });
   } catch (err) {
     console.log(err);
   }
