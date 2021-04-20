@@ -22,4 +22,19 @@ router.post("/", async (req, res) => {
   }
 });
 
+//fetch all posts
+router.get("/", async (req, res) => {
+  try {
+    const findServer = await Server.find()
+      .populate("channel")
+      .sort("-createdAt");
+
+    res.json(findServer);
+  } catch (err) {
+    res.status(500).send();
+  }
+});
+
+router.get("/", async (req, res) => {});
+
 module.exports = router;

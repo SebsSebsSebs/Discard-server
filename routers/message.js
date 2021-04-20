@@ -7,7 +7,8 @@ router.post("/:channelId", async (req, res) => {
     const channelId = req.params.channelId;
     const { text, isImg } = req.body;
 
-    const existChannel = await Channel.findOne({ channelId });
+    const existChannel = await Channel.findOne({ _id: channelId });
+    console.log("channel", existChannel);
     if (!existChannel)
       return res.status(400).json({
         errorMessage: "No channel soz",
@@ -27,6 +28,19 @@ router.post("/:channelId", async (req, res) => {
     message.save().then((result) => {
       res.json({ message: result });
     });
+  } catch (err) {
+    res.status(500).send();
+  }
+});
+
+//fetch all messages
+router.get("/", async (req, res) => {
+  try {
+    const findMessage = await Message.find()
+      .populate("channelId", "channelName")
+      .sort("-createdAt");
+
+    res.json(findMessage);
   } catch (err) {
     res.status(500).send();
   }
