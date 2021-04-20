@@ -8,8 +8,6 @@ const userSchema = new mongoose.Schema(
     username: { type: String, required: true },
 
     passwordHash: { type: String, required: true },
-
-    followers: [{ type: ObjectId, ref: "user" }],
   },
   { timestamps: true }
 );

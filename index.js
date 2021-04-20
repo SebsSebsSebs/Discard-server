@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const auth = require("./middleware/auth");
 
 dotenv.config();
 
@@ -25,6 +26,9 @@ app.listen(5000, () => console.log("server started on port => ", PORT));
 //router set up
 
 app.use("/user", require("./routers/user"));
+app.use("/message", auth, require("./routers/message"));
+app.use("/channel", auth, require("./routers/channel"));
+app.use("/server", auth, require("./routers/server"));
 
 //connect to mongoDB
 mongoose.connect(
