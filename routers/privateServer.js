@@ -4,9 +4,9 @@ const PrivateServer = require("../models/privateServerModel");
 
 router.post("/", async (req, res) => {
   try {
-    const { name } = req.body;
+    const { privateServerName } = req.body;
 
-    const inputName = await PrivateServer.findOne({ name });
+    const inputName = await PrivateServer.findOne({ privateServerName });
     if (inputName)
       return res.status(400).json({
         errorMessage: "naming error",
@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
 
     req.user.password = undefined;
     const privateServer = new PrivateServer({
-      name,
+      privateServerName,
       userId: req.user,
     });
     console.log("privateserver", privateServer);

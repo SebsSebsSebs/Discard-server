@@ -38,7 +38,7 @@ router.get("/:privateServerId", async (req, res) => {
   try {
     const privateServerId = req.params.privateServerId;
     const findMessage = await PrivateMessage.find({ privateServerId })
-      .populate("privateServerId", "name")
+      .populate("privateServerId", "privateServerName")
       .populate("userId", "username")
       .sort("-createdAt");
 

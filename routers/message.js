@@ -46,4 +46,19 @@ router.get("/", async (req, res) => {
   }
 });
 
+//fetch all messages by channel id => for Pim
+router.get("/:channelId", async (req, res) => {
+  try {
+    const channelId = req.params.channelId;
+    const findMessage = await Message.find({ channelId })
+      .populate("channelId", "channelName")
+      .populate("userId", "username")
+      .sort("-createdAt");
+
+    res.json(findMessage);
+  } catch (err) {
+    res.status(500).send();
+  }
+});
+
 module.exports = router;
