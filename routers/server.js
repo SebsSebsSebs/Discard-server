@@ -1,5 +1,5 @@
 const router = require("express").Router();
-
+const User = require("../models/userModel");
 const Server = require("../models/serverModel");
 
 router.post("/", async (req, res) => {
@@ -14,8 +14,19 @@ router.post("/", async (req, res) => {
     const server = new Server({
       serverName,
     });
+
     server.save().then((result) => {
       res.json({ server: result });
+    });
+
+    User.findByIdAndUpdate(
+      req.user,
+      {
+        $push: { server: server }, //push ID of logged in user to array of user being followed
+      },
+      { new: true }
+    ).then((result) => {
+      res.json({ user: result });
     });
   } catch (err) {
     res.status(500).send();
@@ -34,7 +45,5 @@ router.get("/", async (req, res) => {
     res.status(500).send();
   }
 });
-
-router.get("/", async (req, res) => {});
 
 module.exports = router;

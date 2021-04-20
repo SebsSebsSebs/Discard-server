@@ -8,6 +8,8 @@ const userSchema = new mongoose.Schema(
     username: { type: String, required: true },
 
     passwordHash: { type: String, required: true },
+
+    server: [{ type: Object, ref: "server" }],
   },
   { timestamps: true }
 );
