@@ -41,3 +41,41 @@ mongoose.connect(
     console.log("Connected to mongoDB");
   }
 );
+
+//socketIo
+const server = require("http").createServer(app);
+const io = require("socket.io")(server); //connecting client
+
+io.on("connection", (socket) => {
+  socket.on("Input chat message", (msgData) => {
+    // 1. put our data in the database
+
+    connect.then((db) => {
+      try {
+        const chat = new Chat({
+          messsage: msgData.chatMessage,
+          sender: msgData.userId,
+          type: msgData.type,
+        }); //create new Chat model and put data in the mongoDB
+
+        chat.save((err, doc) => {
+          if (err) {
+            return res.json({ success: false, err });
+          }
+
+          Chat.find({ id: doc.id })
+            .populate("sender")
+            .exec((err, doc) => {
+              return io.emit("Output chat message", doc); //sending the chat value to the client
+            });
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  });
+}); //data coming from client
+
+server.listen(PORT, () => {
+  console.log(`Server running on PORT ${PORT}`);
+});
