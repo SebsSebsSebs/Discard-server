@@ -11,6 +11,6 @@ const privateMessagesSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const privateMessages = mongoose.model("channel", privateMessagesSchema);
+const PrivateMessages = mongoose.model("privateMessage", privateMessagesSchema);
 
-module.exports = privateMessages;
+module.exports = PrivateMessages;

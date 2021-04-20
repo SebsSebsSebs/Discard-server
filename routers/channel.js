@@ -33,7 +33,7 @@ router.post("/:serverId", async (req, res) => {
   }
 });
 
-//fetch all posts
+//fetch all channels
 router.get("/", async (req, res) => {
   try {
     const findChannel = await Channel.find()

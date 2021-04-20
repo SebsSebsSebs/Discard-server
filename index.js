@@ -29,6 +29,8 @@ app.use("/user", require("./routers/user"));
 app.use("/message", auth, require("./routers/message"));
 app.use("/channel", auth, require("./routers/channel"));
 app.use("/server", auth, require("./routers/server"));
+app.use("/privateserver", auth, require("./routers/privateServer"));
+app.use("/privatemessage", auth, require("./routers/privateMessage"));
 
 //connect to mongoDB
 mongoose.connect(
