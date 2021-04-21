@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Message = require("../models/messageModel");
 const Channel = require("../models/channelModel");
 
-router.post("/:channelId", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const channelId = req.params.channelId;
     const { text, isImg } = req.body;

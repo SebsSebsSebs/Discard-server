@@ -4,6 +4,8 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const auth = require("./middleware/auth");
+const Message = require("./models/messageModel");
+// const connect = require("./dbconnect");
 
 dotenv.config();
 
@@ -11,7 +13,7 @@ dotenv.config();
 PORT = 4000;
 const app = express();
 
-app.use(cors({ origin: "http://localhost:3000/", credentials: true }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 // set up http only cookie
 app.use(cookieParser());
 app.use(express.json());
@@ -50,8 +52,25 @@ io.on("connection", (socket) => {
   socket.on("Input chat message", (msgData) => {
     // 1. put our data in the database
     console.log(msgData);
-    // socket.connect.then((db) => {
+    // console.log(connect);
+    // connect.then((db) => {
     //   try {
+    //     const message = new Message({
+    //       text: msgData.text,
+    //       channelId: msgData.channelId,
+    //       isImg: msgData.isImg,
+    //       userId: msgData.Img,
+    //     });
+    //     message.save();
+    //     // .then((result) => {
+    //     //   res.json({ message: result });
+    //     // });
+    //   } catch (err) {
+    //     // res.status(500).send();
+    //     console.log(err.message);
+    //   }
+    // });
+
     //     // const msg = new Chat({
     //     //   messsage: msgData.chatMessage,
     //     //   sender: msgData.userId,
@@ -68,7 +87,9 @@ io.on("connection", (socket) => {
     //     //   .exec((err, doc) => {
     //     //     return io.emit("Output chat message", doc); //sending the chat value to the client
     //     //   });
-    //     io.emit("Output chat message", msgData);
+    // req.user.password = undefined;
+
+    io.emit("Output chat message", msgData);
     //     // });
     //   } catch (e) {
     //     console.error(e);
