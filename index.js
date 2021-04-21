@@ -7,21 +7,16 @@ const auth = require("./middleware/auth");
 
 dotenv.config();
 
-//set up express server
-PORT = 5000;
+//set up expess server
+PORT = 4000;
 const app = express();
 
-app.use(express.json());
-//set up http only cookie
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
+app.use(cors({ origin: "http://localhost:3000/", credentials: true }));
+// set up http only cookie
 app.use(cookieParser());
+app.use(express.json());
 
-app.listen(5000, () => console.log("server started on port => ", PORT));
+// app.listen(PORT, () => console.log("server started on port => ", PORT));
 
 //router set up
 
@@ -44,35 +39,41 @@ mongoose.connect(
 
 //socketIo
 const server = require("http").createServer(app);
-const io = require("socket.io")(server); //connecting client
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+  },
+}); //connecting client
 
 io.on("connection", (socket) => {
+  console.log("user connected");
   socket.on("Input chat message", (msgData) => {
     // 1. put our data in the database
+    console.log(msgData);
+    // socket.connect.then((db) => {
+    //   try {
+    //     // const msg = new Chat({
+    //     //   messsage: msgData.chatMessage,
+    //     //   sender: msgData.userId,
+    //     //   type: msgData.type,
+    //     // }); //create new Chat model and put data in the mongoDB
 
-    connect.then((db) => {
-      try {
-        const chat = new Chat({
-          messsage: msgData.chatMessage,
-          sender: msgData.userId,
-          type: msgData.type,
-        }); //create new Chat model and put data in the mongoDB
+    //     // chat.save((err, doc) => {
+    //     //   if (err) {
+    //     //     return res.json({ success: false, err });
+    //     //   }
 
-        chat.save((err, doc) => {
-          if (err) {
-            return res.json({ success: false, err });
-          }
-
-          Chat.find({ id: doc.id })
-            .populate("sender")
-            .exec((err, doc) => {
-              return io.emit("Output chat message", doc); //sending the chat value to the client
-            });
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    });
+    //     // Chat.find({ id: doc.id })
+    //     //   .populate("sender")
+    //     //   .exec((err, doc) => {
+    //     //     return io.emit("Output chat message", doc); //sending the chat value to the client
+    //     //   });
+    //     io.emit("Output chat message", msgData);
+    //     // });
+    //   } catch (e) {
+    //     console.error(e);
+    //   }
+    // });
   });
 }); //data coming from client
 
