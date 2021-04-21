@@ -49,22 +49,22 @@ const io = require("socket.io")(server, {
 
 io.on("connection", (socket) => {
   console.log("user connected");
-  socket.on("Input chat message", (msgData) => {
+  socket.on("Input chat message", async (msgData) => {
     // 1. put our data in the database
     console.log(msgData);
     // console.log(connect);
     // connect.then((db) => {
     //   try {
-    //     const message = new Message({
-    //       text: msgData.text,
-    //       channelId: msgData.channelId,
-    //       isImg: msgData.isImg,
-    //       userId: msgData.Img,
-    //     });
-    //     message.save();
-    //     // .then((result) => {
-    //     //   res.json({ message: result });
-    //     // });
+
+    const message = new Message({
+      text: msgData.text,
+      channelId: msgData.channelId,
+      isImg: msgData.isImg,
+      userId: msgData.userId,
+    });
+    console.log(message);
+    await message.save();
+
     //   } catch (err) {
     //     // res.status(500).send();
     //     console.log(err.message);
@@ -88,6 +88,11 @@ io.on("connection", (socket) => {
     //     //     return io.emit("Output chat message", doc); //sending the chat value to the client
     //     //   });
     // req.user.password = undefined;
+
+    // const findMessage = await Message.find({ channelId })
+    // .populate("channelId", "channelName")
+    // .populate("userId", "username")
+    // .sort("-createdAt");
 
     io.emit("Output chat message", msgData);
     //     // });
