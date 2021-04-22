@@ -64,9 +64,7 @@ io.on("connection", (socket) => {
   socket.on("Delete chat message", async (msgId) => {
     console.log(msgId);
     const messageId = msgId.messageId;
-
     const existingMessage = await Message.findByIdAndDelete({ _id: messageId });
-
     io.emit("Done deleting chat message", "true");
   });
 }); //data coming from client
