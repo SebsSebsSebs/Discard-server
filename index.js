@@ -29,7 +29,6 @@ app.use("/server", auth, require("./routers/server"));
 app.use("/privateserver", auth, require("./routers/privateServer"));
 app.use("/privatemessage", auth, require("./routers/privateMessage"));
 
-//connect to mongoDB
 mongoose.connect(
   process.env.DB_CONNECT_STRING,
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
@@ -39,22 +38,17 @@ mongoose.connect(
   }
 );
 
-//socketIo
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
   },
-}); //connecting client
+});
 
 io.on("connection", (socket) => {
   console.log("user connected");
   socket.on("Input chat message", async (msgData) => {
-    // 1. put our data in the database
     console.log(msgData);
-    // console.log(connect);
-    // connect.then((db) => {
-    //   try {
 
     const message = new Message({
       text: msgData.text,
@@ -65,41 +59,15 @@ io.on("connection", (socket) => {
     console.log(message);
     await message.save();
 
-    //   } catch (err) {
-    //     // res.status(500).send();
-    //     console.log(err.message);
-    //   }
-    // });
-
-    //     // const msg = new Chat({
-    //     //   messsage: msgData.chatMessage,
-    //     //   sender: msgData.userId,
-    //     //   type: msgData.type,
-    //     // }); //create new Chat model and put data in the mongoDB
-
-    //     // chat.save((err, doc) => {
-    //     //   if (err) {
-    //     //     return res.json({ success: false, err });
-    //     //   }
-
-    //     // Chat.find({ id: doc.id })
-    //     //   .populate("sender")
-    //     //   .exec((err, doc) => {
-    //     //     return io.emit("Output chat message", doc); //sending the chat value to the client
-    //     //   });
-    // req.user.password = undefined;
-
-    // const findMessage = await Message.find({ channelId })
-    // .populate("channelId", "channelName")
-    // .populate("userId", "username")
-    // .sort("-createdAt");
-
     io.emit("Output chat message", msgData);
-    //     // });
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // });
+  });
+  socket.on("Delete chat message", async (msgId) => {
+    console.log(msgId);
+    const messageId = msgId.messageId;
+
+    const existingMessage = await Message.findByIdAndDelete({ _id: messageId });
+
+    io.emit("Done deleting chat message", "true");
   });
 }); //data coming from client
 
