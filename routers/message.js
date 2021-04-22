@@ -51,13 +51,12 @@ router.get("/:channelId", async (req, res) => {
   try {
     const channelId = req.params.channelId;
     const findMessage = await Message.find({ channelId })
-      .populate("channelId", "channelName")
       .populate("userId", "username")
-      .sort("-createdAt");
+      .sort("createdAt");
 
     res.json(findMessage);
   } catch (err) {
-    res.status(500).send();
+    res.send(err.message);
   }
 });
 
