@@ -4,7 +4,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 const channelSchema = new mongoose.Schema(
   {
     channelName: { type: String, required: true },
-    serverId: { type: ObjectId, ref: "server" },
+    // serverId: { type: ObjectId, ref: "server" },
   },
   { timestamps: true }
 );
