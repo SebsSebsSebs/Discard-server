@@ -10,7 +10,7 @@ const Message = require("./models/messageModel");
 dotenv.config();
 
 //set up expess server
-PORT = 4000;
+PORT = process.env.PORT || 5000;
 const app = express();
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
@@ -18,7 +18,7 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
 
-// app.listen(PORT, () => console.log("server started on port => ", PORT));
+app.listen(PORT, () => console.log(`server started on port =>${PORT} `));
 
 //router set up
 
