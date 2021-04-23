@@ -10,15 +10,13 @@ const Message = require("./models/messageModel");
 dotenv.config();
 
 //set up expess server
-PORT = process.env.PORT || 4000;
+PORT = 4000;
 const app = express();
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 // set up http only cookie
 app.use(cookieParser());
 app.use(express.json());
-
-app.listen(PORT, () => console.log("server started on port => "));
 
 //router set up
 
