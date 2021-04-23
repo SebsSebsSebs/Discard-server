@@ -33,4 +33,6 @@ router.get("/", async (req, res) => {
   }
 });
 
+//delete channel
+
 module.exports = router;
