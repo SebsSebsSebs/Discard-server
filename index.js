@@ -5,7 +5,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const auth = require("./middleware/auth");
 const Message = require("./models/messageModel");
-// const connect = require("./dbconnect");
+
 
 dotenv.config();
 
@@ -35,6 +35,8 @@ mongoose.connect(
     console.log("Connected to mongoDB");
   }
 );
+
+//test 
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
