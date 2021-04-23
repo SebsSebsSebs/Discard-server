@@ -58,14 +58,21 @@ io.on("connection", (socket) => {
     });
     console.log(message);
     await message.save();
+    console.log(message._id);
 
-    io.emit("Output chat message", msgData);
+    io.emit("Output chat message", { ...msgData, _id: message._id });
   });
   socket.on("Delete chat message", async (msgId) => {
     console.log(msgId);
     const messageId = msgId.messageId;
     const existingMessage = await Message.findByIdAndDelete({ _id: messageId });
     io.emit("Done deleting chat message", "true");
+  });
+  socket.on("Delete", async (msgId) => {
+    console.log(msgId);
+    const messageId = msgId.messageId;
+    await Message.findByIdAndDelete({ _id: messageId });
+    io.emit("Done deleting", msgId.index);
   });
 }); //data coming from client
 
